@@ -1,5 +1,5 @@
 -- =======================================================
--- PINATHUB - REEL A BRAINROT (WINDUI)
+-- PINATHUB - REEL A BRAINROT (WINDUI v2)
 -- Complete Fishing Automation | Mobile/Desktop Friendly
 -- TikTok: @viunze
 -- =======================================================
@@ -837,8 +837,8 @@ logoGui.Parent = Player:WaitForChild("PlayerGui", 5)
 
 local logoButton = Instance.new("ImageButton")
 logoButton.Name = "LogoButton"
-logoButton.Size = UDim2.new(0, 60, 0, 60)
-logoButton.Position = UDim2.new(0.5, -30, 0.5, -30)
+logoButton.Size = UDim2.new(0, 50, 0, 50)
+logoButton.Position = UDim2.new(0.5, -25, 0.5, -25)
 logoButton.BackgroundTransparency = 1
 logoButton.Image = "rbxassetid://118264723961739"
 logoButton.ImageColor3 = Color3.fromRGB(180, 0, 255)
@@ -849,16 +849,11 @@ local uiCorner = Instance.new("UICorner")
 uiCorner.CornerRadius = UDim.new(1, 0)
 uiCorner.Parent = logoButton
 
-local hoverTween = TweenService:Create(logoButton, TweenInfo.new(0.2), {Size = UDim2.new(0, 70, 0, 70)})
-local unhoverTween = TweenService:Create(logoButton, TweenInfo.new(0.2), {Size = UDim2.new(0, 60, 0, 60)})
+local hoverTween = TweenService:Create(logoButton, TweenInfo.new(0.2), {Size = UDim2.new(0, 60, 0, 60)})
+local unhoverTween = TweenService:Create(logoButton, TweenInfo.new(0.2), {Size = UDim2.new(0, 50, 0, 50)})
 
-logoButton.MouseEnter:Connect(function()
-    hoverTween:Play()
-end)
-
-logoButton.MouseLeave:Connect(function()
-    unhoverTween:Play()
-end)
+logoButton.MouseEnter:Connect(function() hoverTween:Play() end)
+logoButton.MouseLeave:Connect(function() unhoverTween:Play() end)
 
 local dragging = false
 local dragInput, dragStart, startPos
@@ -892,32 +887,21 @@ UIS.InputChanged:Connect(function(input)
 end)
 
 -- =======================================================
--- LOAD WINDUI
+-- LOAD WINDUI v2
 -- =======================================================
-local WindUI = (function()
-    local success, result = pcall(function()
-        return loadstring(game:HttpGet("https://raw.githubusercontent.com/Footagesus/WindUI/main/dist/main.lua", true))()
-    end)
-    return success and result or nil
-end)()
+local WindUI = loadstring(game:HttpGet("https://github.com/Footagesus/WindUI/releases/latest/download/main.lua"))()
 
-if not WindUI then 
-    ShowNotification("Error", "Failed to load WindUI Library", 5)
-    return 
-end
-
--- =======================================================
--- CREATE CUSTOM WINDOW
--- =======================================================
 local Window = WindUI:CreateWindow({
     Title = "PinatHub",
-    Author = "pinathub",
-    Folder = "PinatHub",
-    NewElements = true,
-    OpenButton = {
-        Enabled = false
-    },
-    Topbar = { Height = 44, ButtonsType = "Default" }
+    Author = "@viunze on tiktok",
+    Folder = "pinathub",
+    Size = UDim2.fromOffset(500, 350),
+    Transparent = true,
+    Theme = "Dark",
+    IsOpenButtonEnabled = false,
+    UserEnabled = true,
+    HasOutline = true,
+    SideBarWidth = 150,
 })
 
 Window:Tag({ Title = "@viunze on tiktok", Icon = "star", Color = Color3.fromHex("#BA00FF"), Border = true })
@@ -1085,14 +1069,8 @@ local CollectSettings = SettingsTab:Section({ Title = "Collect Settings" })
 CollectSettings:Slider({
     Title = "Collect Interval",
     Desc = "Time between full collect sweeps (seconds)",
-    IsTooltip = true,
-    IsTextbox = true,
-    Step = 0.01,
-    Value = {
-        Min = 0.02,
-        Max = 1,
-        Default = 0.08,
-    },
+    Value = { Min = 0.02, Max = 1, Default = 0.08 },
+    Rounding = 2,
     Callback = function(value)
         state.collectInterval = value
     end,
@@ -1101,14 +1079,8 @@ CollectSettings:Slider({
 CollectSettings:Slider({
     Title = "Per Plot Delay",
     Desc = "Delay between each plot collect (seconds)",
-    IsTooltip = true,
-    IsTextbox = true,
-    Step = 0.001,
-    Value = {
-        Min = 0.001,
-        Max = 0.1,
-        Default = 0.005,
-    },
+    Value = { Min = 0.001, Max = 0.1, Default = 0.005 },
+    Rounding = 3,
     Callback = function(value)
         state.collectPerPlotDelay = value
     end,
@@ -1117,14 +1089,8 @@ CollectSettings:Slider({
 CollectSettings:Slider({
     Title = "Collect Burst",
     Desc = "Number of collects per plot before moving",
-    IsTooltip = true,
-    IsTextbox = true,
-    Step = 1,
-    Value = {
-        Min = 1,
-        Max = 10,
-        Default = 1,
-    },
+    Value = { Min = 1, Max = 10, Default = 1 },
+    Rounding = 0,
     Callback = function(value)
         state.collectBurst = value
     end,
